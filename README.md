@@ -7,6 +7,7 @@ of the [Chinese remainder theorem](https://en.wikipedia.org/wiki/Chinese_remaind
 This is simple enough that one can turn the problem around: what is the list of all finite abelian groups of a given order?
 The answer is given by listing the prime factors of the order and putting them together either using prime powers or
 invariant factors. This is relatively algorithmic, so I decided to automate it, partly to get more experience with these
-algorithms and partly to play with some interesting programming problems.
+algorithms and partly to play with some interesting programming problems. Though it's currently done in Python, I'd like
+to try in Haskell and Rust, to play with those two languages a little more.
 
-In addition to the sources for these programs, I will also provide some sample outputs.
+In addition to the sources for these programs, I have provided some sample outputs in the `examples` directory.

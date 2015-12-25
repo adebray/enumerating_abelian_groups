@@ -66,8 +66,8 @@ def partitions(p: int, n: int) -> list:
 	return _part_lt(p, n, n)
 
 # Flattens one level of a list, turning [[1, 2, 3], [4, 5]] into [1, 2, 3, 4, 5].
-def flatten(a: list) -> list:
-	return [item for sublist in a for item in sublist]
+def flatten(xs: list) -> list:
+	return [item for sublist in xs for item in sublist]
 
 # Given the prime factors, returns a list of all abelian groups of the given order in primary-
 # factors format.
@@ -75,26 +75,36 @@ def primary_factor_decomp(factors: collections.Counter) -> list:
 	decomps_at_primes = [partitions(p, factors[p]) for p in factors]
 	return [flatten(choice) for choice in itertools.product(*decomps_at_primes)]
 
-# note that this also uses partitions of pth powers, but puts them together in a different way.
+# Uses the partitions in a different way to make a list of all abelian groups of a given order in
+# the invariant-factors decomposition.
 def invariant_factor_decomp(factors: collections.Counter) -> list:
-	pass # TODO
+	decomps_at_primes = [partitions(p, factors[p]) for p in factors]
+	return [(functools.reduce(lambda x,y: x*y, inv_fact)
+		for inv_fact in itertools.zip_longest(*choice, fillvalue=1))
+		for choice in itertools.product(*decomps_at_primes)]
+
+# Returns "there are n abelian groups" or "there is one abelian group" depending on the value of n.
+def format_plurals(n: int) -> str:
+	if n == 1:
+		return 'There is one abelian group'
+	else:
+		return 'There are %d abelian groups' % n
 
 # Formats and prints the output.
-# TODO: factor out common code, "is"/"are"
 def output(groups: list, order: int, as_TeX: bool):
 	if as_TeX:
 		print('\\documentclass{amsart}')
 		print('\\newcommand{\\Z}{\\mathbb Z}')
-		print('\\title{Groups of Order %d}' % order)
+		print('\\title{Abelian Groups of Order %d}' % order)
 		print('\\begin{document}')
 		print('\\maketitle')
-		print('There are %d abelian groups of order %d.' % (len(groups), order))
+		print('%s of order %d.' % (format_plurals(len(groups)), order))
 		print('\\begin{gather*}')
 		print('\\\\\n'.join(['\\oplus'.join(['\\Z/%d' % component for component in group]) for group in groups]))
 		print('\\end{gather*}')
 		print('\\end{document}')
 	else:
-		print('There are %d abelian groups of order %d.' % (len(groups), order))
+		print('%s of order %d.' % (format_plurals(len(groups)), order))
 		for group in groups:
 			print('⊕ '.join('\033[1mZ\033[0m/%d' % component for component in group))
 
