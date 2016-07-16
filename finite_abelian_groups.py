@@ -106,7 +106,7 @@ def output(groups: list, order: int, as_TeX: bool):
 	else:
 		print('%s of order %d.' % (format_plurals(len(groups)), order))
 		for group in groups:
-			print('⊕ '.join('\033[1mZ\033[0m/%d' % component for component in group))
+			print('⊕ '.join('ℤ/%d' % component for component in group))
 
 def main():
 	arginfo = parse_args()
